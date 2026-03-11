@@ -56,7 +56,85 @@
             z-index: 100;
         }
 
-        /* CABECERA PRINCIPAL - ESTILO APP */
+        /* MODAL DE BIENVENIDA - PARA INGRESAR NOMBRE */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-contenido {
+            background: white;
+            border-radius: 40px;
+            padding: 30px 25px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-contenido h2 {
+            color: #0a2f44;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .modal-contenido p {
+            color: #2e5777;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .modal-contenido input {
+            width: 100%;
+            padding: 18px 20px;
+            font-size: 1.2rem;
+            border: 3px solid #c9ddef;
+            border-radius: 60px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .modal-contenido input:focus {
+            border-color: #f5c542;
+        }
+
+        .btn-guardar {
+            background: #0a2f44;
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 60px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-guardar:active {
+            background: #f5c542;
+            color: #0a2f44;
+            transform: scale(0.97);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* CABECERA PRINCIPAL - CON NOMBRE DE USUARIO */
         .app-header {
             background: linear-gradient(145deg, #0a2f44, #154e6b);
             padding: 25px 20px 35px 20px;
@@ -81,6 +159,37 @@
             border-radius: 40px;
             font-size: 1.6rem;
             display: inline-block;
+        }
+
+        .saludo-usuario {
+            background: rgba(255,255,255,0.15);
+            padding: 12px 20px;
+            border-radius: 60px;
+            margin: 15px 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-cambiar-usuario {
+            background: rgba(255,255,255,0.25);
+            border: 2px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-left: auto;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-cambiar-usuario:active {
+            background: white;
+            color: #0a2f44;
         }
 
         .app-header p {
@@ -160,7 +269,7 @@
             font-size: 1.4rem;
         }
 
-        /* CONTENEDOR DEL DÍA */
+        /* CONTENEDOR DEL DÍA (TARJETA PRINCIPAL) */
         .dia-card-principal {
             background: #f8fcff;
             border-radius: 40px;
@@ -247,29 +356,14 @@
         }
 
         .actividades-app li {
-            padding: 10px 0 10px 32px;
-            background-size: 20px;
+            padding: 8px 0 8px 28px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="%230b3b5c"><circle cx="12" cy="12" r="8"/></svg>') left center no-repeat;
+            background-size: 16px;
             font-size: 1rem;
             color: #1d4057;
             border-bottom: 1px solid #edf2f8;
-            cursor: pointer;
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         .actividades-app li:last-child { border-bottom: none; }
-        
-        .check-indicator {
-            font-size: 1.2rem;
-            width: 24px;
-            display: inline-block;
-        }
-        
-        .actividad-completada {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
 
         /* SECCIÓN DE INFORMACIÓN */
         .info-app-section {
@@ -358,22 +452,6 @@
             font-size: 0.85rem;
         }
 
-        /* BOTÓN DE RESET */
-        .reset-btn {
-            background: none;
-            border: 2px solid #f5c542;
-            color: #0a2f44;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-weight: 600;
-            margin-left: 15px;
-            cursor: pointer;
-        }
-        .reset-btn:active {
-            background: #f5c542;
-        }
-
-        /* ANIMACIONES */
         .sesion-app-card { animation: fadeIn 0.2s ease; }
         @keyframes fadeIn { 
             0% { opacity: 0.5; transform: translateY(5px); } 
@@ -383,18 +461,34 @@
 </head>
 <body>
 <div class="app-screen" id="appScreen">
+    <!-- MODAL DE BIENVENIDA (se muestra si no hay nombre guardado) -->
+    <div id="modalBienvenida" class="modal-overlay">
+        <div class="modal-contenido">
+            <h2>✨ ¡Bienvenida!</h2>
+            <p>¿Cómo te llamas?</p>
+            <input type="text" id="inputNombre" placeholder="Escribe tu nombre" maxlength="20">
+            <button class="btn-guardar" id="btnGuardarNombre">Comenzar</button>
+        </div>
+    </div>
+
     <!-- BARRA DE ESTADO MÓVIL -->
     <div class="status-bar">
         <span>📶 9:41</span>
         <span>🔋 100%</span>
     </div>
 
-    <!-- HEADER APP -->
+    <!-- HEADER APP CON NOMBRE DE USUARIO -->
     <div class="app-header">
-        <h1>✨ <span>EMERECIANA</span></h1>
+        <h1>✨ <span>YASMINA</span></h1>
+        
+        <!-- SALUDO PERSONALIZADO (se actualiza con JS) -->
+        <div class="saludo-usuario" id="saludoUsuario">
+            👋 Hola, <span id="nombreUsuario">...</span>
+            <button class="btn-cambiar-usuario" id="cambiarUsuario">✏️ Cambiar</button>
+        </div>
+        
         <p>📘 Higiene y Epidemiología · 4º semestre</p>
         <div class="fecha-app" id="fechaApp">📅 Cargando...</div>
-        <button class="reset-btn" id="resetProgreso">↻ Resetear progreso</button>
     </div>
 
     <!-- SCROLL DE DÍAS (HORIZONTAL) -->
@@ -447,7 +541,78 @@
 
 <script>
     (function() {
-        // ===== DATOS =====
+        // =============================================
+        // GESTIÓN DE NOMBRE DE USUARIO CON LOCALSTORAGE
+        // =============================================
+        const STORAGE_NOMBRE = 'yasmina_usuario';
+        
+        // Elementos del DOM
+        const modalBienvenida = document.getElementById('modalBienvenida');
+        const inputNombre = document.getElementById('inputNombre');
+        const btnGuardar = document.getElementById('btnGuardarNombre');
+        const nombreSpan = document.getElementById('nombreUsuario');
+        const btnCambiar = document.getElementById('cambiarUsuario');
+        
+        // Función para guardar nombre
+        function guardarNombre(nombre) {
+            if (nombre && nombre.trim() !== '') {
+                localStorage.setItem(STORAGE_NOMBRE, nombre.trim());
+                actualizarSaludo();
+                modalBienvenida.style.display = 'none';
+            }
+        }
+        
+        // Función para actualizar el saludo
+        function actualizarSaludo() {
+            const nombre = localStorage.getItem(STORAGE_NOMBRE);
+            if (nombre) {
+                nombreSpan.textContent = nombre;
+            } else {
+                nombreSpan.textContent = 'invitado';
+            }
+        }
+        
+        // Función para mostrar modal
+        function mostrarModal() {
+            modalBienvenida.style.display = 'flex';
+            inputNombre.value = '';
+            inputNombre.focus();
+        }
+        
+        // Comprobar si ya hay nombre guardado
+        const nombreGuardado = localStorage.getItem(STORAGE_NOMBRE);
+        if (nombreGuardado) {
+            modalBienvenida.style.display = 'none';
+            actualizarSaludo();
+        } else {
+            modalBienvenida.style.display = 'flex';
+        }
+        
+        // Event listeners para guardar nombre
+        btnGuardar.addEventListener('click', () => {
+            guardarNombre(inputNombre.value);
+        });
+        
+        inputNombre.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                guardarNombre(inputNombre.value);
+            }
+        });
+        
+        // Botón para cambiar usuario
+        btnCambiar.addEventListener('click', () => {
+            mostrarModal();
+        });
+
+        // FECHA ACTUAL
+        function actualizarFecha() {
+            const f = new Date();
+            const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
+            document.getElementById('fechaApp').innerHTML = `📅 ${f.toLocaleDateString('es-ES', opciones)}`;
+        }
+        actualizarFecha();
+
+        // DATOS DE LOS DÍAS
         const dias = [
             { nombre: 'LUNES', emoji: '🌅', lema: 'instituciones y desastres', color: '#2a6f97',
               sesiones: [
@@ -461,119 +626,4 @@
             ]},
             { nombre: 'MIÉRCOLES', emoji: '🧫', lema: 'agentes biológicos + bioseguridad', color: '#1f77b4',
               sesiones: [
-                { hora: '9:00 – 11:00', asig: 'Riesgos por agentes Biológicos', acts: ['Repaso clase mañana (8:00-12:00)', 'Clasificación virus/bacterias', 'Vías transmisión'] },
-                { hora: '17:00 – 19:00', asig: 'Seguridad Biológica', acts: ['Clase tarde (14:00-15:35 / 15:40-17:15)', 'Niveles bioseguridad', 'EPP · protocolos'] }
-            ]},
-            { nombre: 'JUEVES', emoji: '🔬', lema: 'biológicos (II) y emergencias', color: '#4f6d8a',
-              sesiones: [
-                { hora: '9:00 – 11:00', asig: 'Riesgos por agentes Biológicos', acts: ['Profundizar mecanismos infección', 'Repaso clase matinal', 'Ejercicios'] },
-                { hora: '18:00 – 20:00', asig: 'Riesgos en Emergencias y Desastres', acts: ['Protocolos', 'Casos históricos', 'Simulacros'] }
-            ]},
-            { nombre: 'VIERNES', emoji: '🌍', lema: 'control internacional y seguridad', color: '#6f4f8a',
-              sesiones: [
-                { hora: '10:00 – 12:00', asig: 'Control Sanitario Internacional', acts: ['Repaso clase mañana', 'Regulaciones', 'Vigilancia fronteras'] },
-                { hora: '17:00 – 19:00', asig: 'Seguridad Biológica', acts: ['Contención primaria/secundaria', 'Gestión residuos'] }
-            ]},
-            { nombre: 'SÁBADO', emoji: '📚', lema: 'integración y pre-lectura', color: '#b4732e',
-              sesiones: [
-                { hora: '10:00 – 12:00', asig: 'REPASO GENERAL SEMANAL', acts: ['Integrar temas lunes-viernes', 'Mapas conceptuales', 'Autoevaluación'] },
-                { hora: '16:00 – 18:00', asig: 'LECTURA PREVIA', acts: ['Adelantar temas próxima semana', 'Material recomendado'] }
-            ]},
-            { nombre: 'DOMINGO', emoji: '🧘', lema: 'planificar y organizar', color: '#8f5e3c',
-              sesiones: [
-                { hora: '17:00 – 19:00', asig: 'ORGANIZACIÓN SEMANAL', acts: ['Ordenar apuntes', 'Planificar objetivos', 'Preparar tutorías'] }
-            ]}
-        ];
-
-        const mapaDias = new Map(dias.map(d => [d.nombre, d]));
-        
-        // ===== LOCALSTORAGE =====
-        const STORAGE_KEY = 'emereciana_progreso';
-        
-        function cargarProgreso() {
-            const guardado = localStorage.getItem(STORAGE_KEY);
-            return guardado ? JSON.parse(guardado) : {};
-        }
-        
-        function guardarProgreso(progreso) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(progreso));
-        }
-        
-        function toggleActividad(diaNombre, sesionIndex, actIndex) {
-            const progreso = cargarProgreso();
-            if (!progreso[diaNombre]) {
-                progreso[diaNombre] = {};
-            }
-            if (!progreso[diaNombre][sesionIndex]) {
-                progreso[diaNombre][sesionIndex] = [];
-            }
-            
-            const key = `${sesionIndex}-${actIndex}`;
-            const index = progreso[diaNombre][sesionIndex].indexOf(key);
-            
-            if (index === -1) {
-                progreso[diaNombre][sesionIndex].push(key);
-            } else {
-                progreso[diaNombre][sesionIndex].splice(index, 1);
-            }
-            
-            guardarProgreso(progreso);
-            renderDia(diaNombre); // Re-render para mostrar cambios
-        }
-        
-        function resetProgreso() {
-            if (confirm('¿Borrar todo el progreso de actividades?')) {
-                localStorage.removeItem(STORAGE_KEY);
-                const diaActivo = document.querySelector('.dia-app-btn.activo');
-                if (diaActivo) {
-                    renderDia(diaActivo.textContent.trim().replace(/[🌅🍎🧫🔬🌍📚🧘]/g, '').trim());
-                }
-            }
-        }
-        
-        // ===== RENDER =====
-        function renderDia(nombreDia) {
-            const dia = mapaDias.get(nombreDia);
-            if (!dia) return;
-            
-            const progreso = cargarProgreso();
-            
-            let html = `
-                <div class="dia-card-principal">
-                    <div class="dia-titulo-contenedor">
-                        <span class="dia-icono-grande">${dia.emoji}</span>
-                        <span class="dia-titulo-texto">${dia.nombre}</span>
-                        <span class="dia-lema">“${dia.lema}”</span>
-                    </div>
-            `;
-
-            dia.sesiones.forEach((s, sesionIdx) => {
-                html += `
-                    <div class="sesion-app-card" style="border-left-color: ${dia.color}">
-                        <span class="hora-app">⏰ ${s.hora}</span>
-                        <div class="asignatura-app">${s.asig}</div>
-                        <ul class="actividades-app">
-                `;
-                
-                s.acts.forEach((a, actIdx) => {
-                    const completada = progreso[dia.nombre]?.[sesionIdx]?.includes(`${sesionIdx}-${actIdx}`);
-                    html += `<li onclick="window.toggleActividad('${dia.nombre}', ${sesionIdx}, ${actIdx})">
-                        <span class="check-indicator">${completada ? '✅' : '⬜'}</span>
-                        <span class="${completada ? 'actividad-completada' : ''}">${a}</span>
-                    </li>`;
-                });
-                
-                html += `</ul></div>`;
-            });
-
-            html += `</div>`;
-            document.getElementById('contenidoDiaPrincipal').innerHTML = html;
-        }
-        
-        // Hacer toggleActividad global
-        window.toggleActividad = toggleActividad;
-        
-        // ===== INICIALIZACIÓN =====
-        function actualizarFecha() {
-            const f = new Date();
-            const opciones = { weekday: '
+                { hora: '9:00 – 11:00', asig: 'Ries
